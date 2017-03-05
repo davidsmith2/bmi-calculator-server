@@ -13,7 +13,7 @@ const BMIService = (function() {
       return data;
     },
     show: function(id) {
-      return _.filter(data, (obj) => obj.id === id);
+      return _.find(data, (obj) => obj.id === id);
     }
   };
 }());
