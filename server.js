@@ -3,17 +3,36 @@
 const Hapi = require('hapi');
 const _ = require('lodash');
 
+const calculateBMI = function(data) {
+  var kg, m;
+  if (data.mode === 'standard') {
+    kg = data.lb * 0.45;
+    m = ((data.ft * 12) + data.in) * 0.025;
+  }
+  if (data.mode === 'metric') {
+    kg = data.kg;
+    m = data.cm / 100;
+  }
+  return Number((kg / Math.pow(m, 2)).toFixed(1));
+};
+
 const BMIService = (function() {
   const data = [];
   return {
-    create: function(bmi) {
-      data.push(bmi);
+    create: function(item) {
+      data.push(Object.assign({}, item, {bmi: calculateBMI(item)}));
     },
     index: function() {
       return data;
     },
     show: function(id) {
-      return _.find(data, (obj) => obj.id === id);
+      var ret;
+      if (id === 'latest') {
+        ret = data[data.length - 1];
+      } else {
+        ret = _.find(data, (obj) => obj.id === id);
+      }
+      return ret || {};
     }
   };
 }());
