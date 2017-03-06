@@ -30,7 +30,9 @@ const BMIService = (function() {
       if (id === 'latest') {
         ret = data[data.length - 1];
       } else {
-        ret = _.find(data, (obj) => obj.id === id);
+        ret = _.find(data, (obj) => {
+          return obj.id === Number(id);
+        });
       }
       return ret || {};
     }
