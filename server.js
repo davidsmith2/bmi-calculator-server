@@ -3,7 +3,22 @@
 const Hapi = require('hapi');
 const _ = require('lodash');
 
-const calculateBMI = function(data) {
+const getBMIDescription = function(value) {
+  let description = 'Obese';
+  if (value < 18.5) {
+    description = 'Underweight';
+  } else if (value < 25) {
+    description = 'Normal weight';
+  } else if (value < 30) {
+    description = 'Overweight';
+  }
+  return {
+    value,
+    description
+  };
+};
+
+const getBMIValue = function(data) {
   var kg, m;
   if (data.mode === 'standard') {
     kg = data.lb * 0.45;
@@ -16,11 +31,13 @@ const calculateBMI = function(data) {
   return Number((kg / Math.pow(m, 2)).toFixed(1));
 };
 
+const getBMI = _.flow([getBMIValue, getBMIDescription]);
+
 const BMIService = (function() {
   const data = [];
   return {
     create: function(item) {
-      data.push(Object.assign({}, item, {bmi: calculateBMI(item)}));
+      data.push(Object.assign({}, item, {bmi: getBMI(item)}));
     },
     index: function() {
       return data;
