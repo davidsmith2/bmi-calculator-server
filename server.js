@@ -37,7 +37,9 @@ const BMIService = (function() {
   const data = [];
   return {
     create: function(item) {
-      data.push(Object.assign({}, item, {bmi: getBMI(item)}));
+      const newItem = Object.assign({}, item, {bmi: getBMI(item), id: new Date().getTime()});
+      data.push(newItem);
+      return newItem;
     },
     index: function() {
       return data;
@@ -93,8 +95,7 @@ server.route({
   method: 'POST',
   path: '/api/bmi',
   handler: function(request, reply) {
-    BMIService.create(request.payload);
-    reply('resource created');
+    reply(BMIService.create(request.payload));
   }
 });
 
