@@ -34,26 +34,32 @@ const getBMIValue = function(data) {
 const getBMI = _.flow([getBMIValue, getBMIDescription]);
 
 const BMIService = (function() {
-  const data = [];
+  let data = [];
   return {
+    index: function() {
+      return data;
+    },
     create: function(item) {
       const newItem = Object.assign({}, item, {bmi: getBMI(item), id: new Date().getTime()});
       data.push(newItem);
       return newItem;
-    },
-    index: function() {
-      return data;
     },
     show: function(id) {
       var ret;
       if (id === 'latest') {
         ret = data[data.length - 1];
       } else {
-        ret = _.find(data, (obj) => {
-          return obj.id === Number(id);
+        ret = _.find(data, (o) => {
+          return o.id === Number(id);
         });
       }
       return ret || {};
+    },
+    delete: function(id) {
+      data = _.reject(data, (o) => {
+        return o.id === Number(id);
+      });
+      return data;
     }
   };
 }());
@@ -87,6 +93,7 @@ server.route({
   method: 'GET',
   path: '/api/bmi',
   handler: function(request, reply) {
+    console.log('GET - /api/bmi');
     return reply(BMIService.index());
   }
 });
@@ -95,6 +102,7 @@ server.route({
   method: 'POST',
   path: '/api/bmi',
   handler: function(request, reply) {
+    console.log('POST - /api/bmi');
     reply(BMIService.create(request.payload));
   }
 });
@@ -103,7 +111,17 @@ server.route({
   method: 'GET',
   path: '/api/bmi/{id}',
   handler: function(request, reply) {
+    console.log(`GET - /api/bmi/${request.params.id}`);
     reply(BMIService.show(request.params.id));
+  }
+});
+
+server.route({
+  method: 'DELETE',
+  path: '/api/bmi/{id}',
+  handler: function(request, reply) {
+    console.log(`DELETE - /api/bmi/${request.params.id}`);
+    reply(BMIService.delete(request.params.id));
   }
 });
 
