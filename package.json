@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "hapi": "^16.1.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "rethinkdb": "^2.3.3"
   }
 }
