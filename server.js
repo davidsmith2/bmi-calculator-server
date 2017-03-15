@@ -3,7 +3,8 @@
 const Hapi = require('hapi');
 
 const Calculator = require('./calculator');
-const Db = require('./db');
+const db = require('./db');
+const io = require('./io');
 
 const server = new Hapi.Server();
 
@@ -15,7 +16,7 @@ server.connection({
   }
 });
 
-server.register([Db], (err) => {
+server.register([io, db], (err) => {
 
   server.route({
     method: 'GET',

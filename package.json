@@ -1,5 +1,5 @@
 {
-  "name": "bmi-calculator-api",
+  "name": "bmi-calculator-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,7 @@
   "dependencies": {
     "hapi": "^16.1.0",
     "lodash": "^4.17.4",
-    "rethinkdb": "^2.3.3"
+    "rethinkdb": "^2.3.3",
+    "socket.io": "^1.7.3"
   }
 }
